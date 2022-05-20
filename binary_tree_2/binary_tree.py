@@ -60,15 +60,23 @@ class BST:
         if search_res.NodeHasKey:
             return False
 
-        new_node = BSTNode(key, val, search_res.Node)
-        if search_res.ToLeft:
-            search_res.Node.LeftChild = new_node
+        if self.Root:
+            new_node = BSTNode(key, val, None)
+            if search_res.ToLeft:
+                search_res.Node.LeftChild = new_node
+            else:
+                search_res.Node.RightChild = new_node
+
+            new_node.Parent = search_res.Node
         else:
-            search_res.Node.RightChild = new_node
+            self.Root = BSTNode(key, val, None)
 
         return True
 
     def FinMinMax(self, FromNode, FindMax):
+        if FromNode is None:
+            return None
+
         if FindMax:
             max_key = self.get_last_right(FromNode)
             return self.FindNodeByKey(max_key)
@@ -91,12 +99,17 @@ class BST:
         if not search_res.NodeHasKey:
             return False
 
-        left_child = search_res.Node.LeftChild
-        right_child = search_res.Node.RightChild
+        target_node = search_res.Node
+        if target_node is self.Root:
+            self.delete_root()
+            return True
+
+        left_child = target_node.LeftChild
+        right_child = target_node.RightChild
         left_is_none = left_child is None
         right_is_none = right_child is None
-        parent = search_res.Node.Parent
-        is_left_child = parent.LeftChild is search_res.Node
+        parent = None if target_node is self.Root else target_node.Parent
+        is_left_child = parent.LeftChild is target_node
 
         if left_is_none and not right_is_none:
             self.add_new_child_to_parent(right_child, parent, is_left_child)
@@ -115,6 +128,22 @@ class BST:
             parent.LeftChild = child
         else:
             parent.RightChild = child
+
+    def delete_root(self):
+        left_child = self.Root.LeftChild
+        right_child = self.Root.RightChild
+        left_is_none = left_child is None
+        right_is_none = right_child is None
+
+        if left_is_none and right_is_none:
+            self.Root = None
+        elif right_is_none:
+            self.Root = left_child
+        elif left_is_none:
+            self.Root = right_child
+        else:
+            substitution_node = self.FinMinMax(right_child, False).Node
+            self.Root = substitution_node
 
     def Count(self):
         if self.Root is None:

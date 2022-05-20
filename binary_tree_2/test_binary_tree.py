@@ -188,3 +188,51 @@ def test_DeleteNodeByKey_existing_2():
     assert res.Node is not node_to_delete
     assert not res.NodeHasKey
     assert node_to_delete.RightChild is None
+
+
+def test_DeleteNodeByKey_remove_root():
+    test_data = _test_data()
+    tree = test_data['tree']
+
+    node_to_delete = test_data['root']
+    res = tree.FindNodeByKey(5)
+    assert res.Node is node_to_delete
+    assert res.NodeHasKey
+
+    assert tree.DeleteNodeByKey(5)
+    res = tree.FindNodeByKey(5)
+    assert res.Node is not node_to_delete
+    assert not res.NodeHasKey
+
+
+def test_DeleteNodeByKey_remove_root_only_left():
+    test_data = _test_data()
+    tree = test_data['tree']
+    new_root = test_data['node3']
+    node_to_delete = test_data['root']
+    node_to_delete.RightChild = None
+
+    assert tree.DeleteNodeByKey(5)
+    assert tree.Root is new_root
+
+
+def test_DeleteNodeByKey_remove_root_only_right():
+    test_data = _test_data()
+    tree = test_data['tree']
+    new_root = test_data['node16']
+    node_to_delete = test_data['root']
+    node_to_delete.LeftChild = None
+
+    assert tree.DeleteNodeByKey(5)
+    assert tree.Root is new_root
+
+
+def test_DeleteNodeByKey_remove_root_no_children():
+    test_data = _test_data()
+    tree = test_data['tree']
+    node_to_delete = test_data['root']
+    node_to_delete.LeftChild = None
+    node_to_delete.RightChild = None
+
+    assert tree.DeleteNodeByKey(5)
+    assert tree.Root is None
