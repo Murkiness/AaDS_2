@@ -123,9 +123,9 @@ def test_Count():
 def test_FinMinMax_from_none():
     tree = BST(None)
     res = tree.FinMinMax(None, False)
-    assert res.Node is None
+    assert res is None
     res = tree.FinMinMax(None, True)
-    assert res.Node is None
+    assert res is None
 
 
 def test_FinMinMax_from_root():
@@ -135,8 +135,44 @@ def test_FinMinMax_from_root():
     expected_max = test_data['node25']
     expected_min = test_data['node2']
 
-    assert tree.FinMinMax(tree.Root, True).Node is expected_max
-    assert tree.FinMinMax(tree.Root, False).Node is expected_min
+    assert tree.FinMinMax(tree.Root, True) is expected_max
+    assert tree.FinMinMax(tree.Root, False) is expected_min
+
+
+def test_FinMinMax_from_root_2_only_left():
+    test_data = _test_data()
+    tree = test_data['tree']
+    tree.Root.RightChild = None
+
+    expected_max = test_data['root']
+    expected_min = test_data['node2']
+
+    assert tree.FinMinMax(tree.Root, True) is expected_max
+    assert tree.FinMinMax(tree.Root, False) is expected_min
+
+
+def test_FinMinMax_from_root_2_only_right():
+    test_data = _test_data()
+    tree = test_data['tree']
+    tree.Root.LeftChild = None
+
+    expected_max = test_data['node25']
+    expected_min = test_data['root']
+
+    assert tree.FinMinMax(tree.Root, True) is expected_max
+    assert tree.FinMinMax(tree.Root, False) is expected_min
+
+
+def test_FinMinMax_from_root_2_no_children():
+    test_data = _test_data()
+    tree = test_data['tree']
+    tree.Root.LeftChild = None
+    tree.Root.RightChild = None
+
+    expected = test_data['root']
+
+    assert tree.FinMinMax(tree.Root, True) is expected
+    assert tree.FinMinMax(tree.Root, False) is expected
 
 
 def test_FinMinMax_from_node():
@@ -147,8 +183,29 @@ def test_FinMinMax_from_node():
     expected_max = test_data['node4']
     expected_min = test_data['node2']
 
-    assert tree.FinMinMax(start_node, True).Node is expected_max
-    assert tree.FinMinMax(start_node, False).Node is expected_min
+    assert tree.FinMinMax(start_node, True) is expected_max
+    assert tree.FinMinMax(start_node, False) is expected_min
+
+
+def test_FinMinMax_from_node_2():
+    test_data = _test_data()
+    tree = test_data['tree']
+
+    # only left child
+    start_node = test_data['node8']
+    expected_max = test_data['node8']
+    expected_min = test_data['node7']
+
+    assert tree.FinMinMax(start_node, True) is expected_max
+    assert tree.FinMinMax(start_node, False) is expected_min
+
+    # only right child
+    start_node = test_data['node20']
+    expected_max = test_data['node25']
+    expected_min = test_data['node20']
+
+    assert tree.FinMinMax(start_node, True) is expected_max
+    assert tree.FinMinMax(start_node, False) is expected_min
 
 
 def test_FinMinMax_from_leaf():
@@ -156,8 +213,8 @@ def test_FinMinMax_from_leaf():
     tree = test_data['tree']
 
     node4 = test_data['node4']
-    assert tree.FinMinMax(node4, True).Node is node4
-    assert tree.FinMinMax(node4, False).Node is node4
+    assert tree.FinMinMax(node4, True) is node4
+    assert tree.FinMinMax(node4, False) is node4
 
 
 def test_DeleteNodeByKey_non_existing():

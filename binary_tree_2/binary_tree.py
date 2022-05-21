@@ -75,14 +75,14 @@ class BST:
 
     def FinMinMax(self, FromNode, FindMax):
         if FromNode is None:
-            return BSTFind()
+            return None
 
         if FindMax:
             max_key = self.get_last_right(FromNode)
-            return self.FindNodeByKey(max_key)
+            return self.FindNodeByKey(max_key).Node
 
         min_key = self.get_last_left(FromNode)
-        return self.FindNodeByKey(min_key)
+        return self.FindNodeByKey(min_key).Node
 
     def get_last_left(self, node):
         if node.LeftChild is None:
@@ -118,7 +118,7 @@ class BST:
         elif left_is_none and right_is_none:
             self.add_new_child_to_parent(None, parent, is_left_child)
         else:
-            substitution_node = self.FinMinMax(right_child, False).Node
+            substitution_node = self.FinMinMax(right_child, False)
             self.add_new_child_to_parent(substitution_node, parent, is_left_child)
 
         return True
@@ -142,7 +142,7 @@ class BST:
         elif left_is_none:
             self.Root = right_child
         else:
-            substitution_node = self.FinMinMax(right_child, False).Node
+            substitution_node = self.FinMinMax(right_child, False)
             self.Root = substitution_node
 
     def Count(self):
