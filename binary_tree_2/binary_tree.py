@@ -95,55 +95,46 @@ class BST:
         return self.get_last_right(node.RightChild)
 
     def DeleteNodeByKey(self, key):
-        search_res = self.FindNodeByKey(key)
-        if not search_res.NodeHasKey:
+        search_result = self.FindNodeByKey(key)
+        if not search_result.NodeHasKey:
             return False
 
-        target_node = search_res.Node
-        if target_node is self.Root:
-            self.delete_root()
-            return True
-
-        left_child = target_node.LeftChild
-        right_child = target_node.RightChild
-        left_is_none = left_child is None
-        right_is_none = right_child is None
-        parent = None if target_node is self.Root else target_node.Parent
-        is_left_child = parent.LeftChild is target_node
-
-        if left_is_none and not right_is_none:
-            self.add_new_child_to_parent(right_child, parent, is_left_child)
-        elif not left_is_none and right_is_none:
-            self.add_new_child_to_parent(left_child, parent, is_left_child)
-        elif left_is_none and right_is_none:
-            self.add_new_child_to_parent(None, parent, is_left_child)
+        removed_node = search_result.Node
+        if removed_node.LeftChild and not removed_node.RightChild:
+            new_node = removed_node.LeftChild
         else:
-            substitution_node = self.FinMinMax(right_child, False)
-            self.add_new_child_to_parent(substitution_node, parent, is_left_child)
+            new_node = self.FinMinMax(removed_node.RightChild, False)
 
+        if removed_node is not self.Root:
+            if removed_node.Parent.LeftChild == removed_node:
+                removed_node.Parent.LeftChild = new_node
+            else:
+                removed_node.Parent.RightChild = new_node
+        else:
+            self.Root = new_node
+
+        if removed_node.LeftChild and not removed_node.RightChild:
+            removed_node.LeftChild.Parent = removed_node.Parent
+            removed_node.LeftChild = None
+        elif removed_node.RightChild:
+            if removed_node.RightChild != new_node:
+                if new_node.RightChild:
+                    new_node.RightChild.Parent = new_node.Parent
+
+                new_node.Parent.LeftChild = new_node.RightChild
+                new_node.RightChild = removed_node.RightChild
+                removed_node.RightChild.Parent = new_node
+
+            if removed_node.LeftChild:
+                removed_node.LeftChild.Parent = new_node
+                new_node.LeftChild = removed_node.LeftChild
+
+            new_node.Parent = removed_node.Parent
+            removed_node.RightChild = None
+            removed_node.LeftChild = None
+
+        removed_node.Parent = None
         return True
-
-    def add_new_child_to_parent(self, child, parent, is_left_child):
-        if is_left_child:
-            parent.LeftChild = child
-        else:
-            parent.RightChild = child
-
-    def delete_root(self):
-        left_child = self.Root.LeftChild
-        right_child = self.Root.RightChild
-        left_is_none = left_child is None
-        right_is_none = right_child is None
-
-        if left_is_none and right_is_none:
-            self.Root = None
-        elif right_is_none:
-            self.Root = left_child
-        elif left_is_none:
-            self.Root = right_child
-        else:
-            substitution_node = self.FinMinMax(right_child, False)
-            self.Root = substitution_node
 
     def Count(self):
         if self.Root is None:

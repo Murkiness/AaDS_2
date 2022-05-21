@@ -237,7 +237,7 @@ def test_DeleteNodeByKey_existing():
     res = tree.FindNodeByKey(16)
     assert res.Node is not node_to_delete
     assert not res.NodeHasKey
-    assert res.Node.NodeKey == 20
+    assert res.Node.NodeKey == 8
 
 
 def test_DeleteNodeByKey_existing_2():
@@ -268,6 +268,7 @@ def test_DeleteNodeByKey_remove_root():
     res = tree.FindNodeByKey(5)
     assert res.Node is not node_to_delete
     assert not res.NodeHasKey
+    assert tree.Count() == 8
 
 
 def test_DeleteNodeByKey_remove_root_only_left():
@@ -284,11 +285,12 @@ def test_DeleteNodeByKey_remove_root_only_left():
 def test_DeleteNodeByKey_remove_root_only_right():
     test_data = _test_data()
     tree = test_data['tree']
-    new_root = test_data['node16']
+    new_root = test_data['node7']
     node_to_delete = test_data['root']
     node_to_delete.LeftChild = None
 
     assert tree.DeleteNodeByKey(5)
+    print(tree.Root.NodeKey)
     assert tree.Root is new_root
 
 
