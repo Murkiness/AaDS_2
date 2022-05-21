@@ -75,7 +75,7 @@ class BST:
 
     def FinMinMax(self, FromNode, FindMax):
         if FromNode is None:
-            return None
+            return BSTFind()
 
         if FindMax:
             max_key = self.get_last_right(FromNode)

@@ -120,6 +120,14 @@ def test_Count():
     assert tree.Count() == 9
 
 
+def test_FinMinMax_from_none():
+    tree = BST(None)
+    res = tree.FinMinMax(None, False)
+    assert res.Node is None
+    res = tree.FinMinMax(None, True)
+    assert res.Node is None
+
+
 def test_FinMinMax_from_root():
     test_data = _test_data()
     tree = test_data['tree']
