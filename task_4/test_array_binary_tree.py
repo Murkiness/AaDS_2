@@ -9,14 +9,14 @@ def test_FindKeyIndex_empty():
 
 
 def test_FindKeyIndex_non_existing():
-    tree = aBST(2)
+    tree = aBST(1)
     tree.Tree[0] = 5
     assert tree.FindKeyIndex(1) == -1
     assert tree.FindKeyIndex(6) == -2
 
 
 def test_FindKeyIndex_existing():
-    tree = aBST(2)
+    tree = aBST(1)
     tree.Tree[0] = 5
     tree.Tree[1] = 2
     tree.Tree[2] = 7
@@ -26,7 +26,8 @@ def test_FindKeyIndex_existing():
 
 
 def test_AddKey():
-    tree = aBST(3)
+    tree = aBST(2)
+    assert len(tree.Tree) == 7
     arr = [50, 25, 75, 100, 60, 15]
 
     for el in arr:
